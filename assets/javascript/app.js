@@ -34,6 +34,7 @@ var displayQuestion = function() {
 
     //Show the next question
     var newDiv = $("<div>");
+    newDiv.attr("id", "willHide");
     var question = $("<div>");
     question.text(questions['Q' + counter].question);
     newDiv.append(question);
@@ -63,10 +64,7 @@ var displayQuestion = function() {
     var checkButton = $("<button>");
     checkButton.text("Submit");
     checkButton.attr("class", "submit");
-    $("#game").append(checkButton);
-
-    radiovalue = $("input[name='same']:checked").val();
-    correctchoice = questions['Q' + counter].correct;
+    $("#willHide").append(checkButton);
 
     //Counter plus one
     counter++;
@@ -75,7 +73,8 @@ var displayQuestion = function() {
 var displayAnswer = function() {
 
     // Empty the displayed info
-    $("#game").empty();
+    // $("#game").hide();
+    $("#willHide").hide();
 
     var newDiv = $("<div>");
     var result = $("<div>");
@@ -93,18 +92,22 @@ var displayAnswer = function() {
 
     nextQuestion.text("Next question");
     
+    radiovalue = $("input[name='same']:checked").val();
+    correctchoice = questions['Q' + (counter - 1)].correct;
     console.log(radiovalue);
     console.log(correctchoice);
 
     if (radiovalue == correctchoice) {
         result.text("That is correct!");
+        correct++;
     }
     else {
         result.text("Unfortunately that is not true.");
+        incorrect--;
     }
 
     newDiv.append(result);
-    answer.text("The correct answer is " + questions['Q' + (counter - 1)].choices[questions['Q' + (counter - 1)].correct]);
+    answer.text("The correct answer is " + correctchoice);
     newDiv.append(answer);
     newDiv.append(image);
     newDiv.append(nextQuestion);
