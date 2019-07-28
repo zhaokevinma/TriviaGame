@@ -1,9 +1,15 @@
+body{
+    background-image: url("../images/background.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .container {
     background-color: papayawhip;
     width: 960px;
-    height: 480px;
+    height: 720px;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 #gameTitle {
@@ -15,13 +21,13 @@
 
 #game { 
     font-family: 'Permanent Marker', cursive;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 24px;
+    line-height: 36px;
     text-align: center;
 }
 
 #startingInfo {
-    margin: 100px;
+    margin: 10px;
 }
 
 button {
@@ -40,4 +46,8 @@ input {
     font-family: 'Permanent Marker', cursive;
     font-size: 16px;
     line-height: 24px;
+}
+
+img {
+    width: 900px;
 }
