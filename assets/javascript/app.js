@@ -33,16 +33,22 @@ var displayQuestion = function() {
         var choiceInputLabel = $("<label>");
 
         choiceInputLabel.text(questions['Q' + counter].choices[i]);
+        choiceInputLabel.attr("for", "choice" + counter);
+
+        choiceInput.attr("id", "choice" + counter);
         choiceInput.attr("value", questions['Q' + counter].choices[i]);
         choiceInput.attr("index", i);
         choiceInput.attr("type", "radio");
         
-        choiceInput.append(choiceInputLabel);
         choiceDiv.append(choiceInput);
+        choiceDiv.append(choiceInputLabel);
+   
         newDiv.append(choiceDiv);
     }
 
-
+    var checkButton = $("<button>");
+    checkButton.text("Submit");
+    $("#game").append(checkButton);
 
     //Counter plus one
     counter++;
