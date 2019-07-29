@@ -19,10 +19,10 @@ var intervalId;
 var clockRunning = false;
 
 var stopwatch = {
-    time: 0,
+    time: 30,
     reset: function() {
-        stopwatch.time = 0;
-        $("#timer").text("00:00");
+        stopwatch.time = 30;
+        $("#timer").text("00:30");
     },
     start: function() {
         if (!clockRunning) {
@@ -30,9 +30,16 @@ var stopwatch = {
             clockRunning = true;
         }
     },
+    stop: function() {
+        clearInterval(intervalId);
+        clockRunning = false;
+    },
     count: function() {
-        stopwatch.time++;
+        stopwatch.time--;
         var converted = stopwatch.timeConverter(stopwatch.time);
+        if (stopwatch.time == 0) {
+            stopwatch.stop();
+        }
         $("#timer").text(converted);
     },
     timeConverter: function(t) {
@@ -68,6 +75,10 @@ var correctchoice = "";
 var correct = 0;
 var incorrect = 0;
 
+var timeOut = function() {
+    setTimeout(displayAnswer, 31000);
+}
+
 var displayQuestion = function() {
 
     //Empty the displayed info
@@ -76,6 +87,7 @@ var displayQuestion = function() {
     //Show the stop watch
     var timer = $("<div>");
     timer.attr("id", "timer");
+    stopwatch.reset();
     stopwatch.start();
 
     //Show the next question
@@ -83,9 +95,9 @@ var displayQuestion = function() {
     newDiv.attr("id", "willHide");
     var question = $("<div>");
     question.text(questions['Q' + counter].question);
-    newDiv.append(question);
+    newDiv.append(timer,question);
 
-    $("#game").append(timer, newDiv);
+    $("#game").append(newDiv);
     
     //Dynamically generate 4 input 
     for (let i = 0; i < questions['Q' + counter].choices.length; i++) {
@@ -115,6 +127,8 @@ var displayQuestion = function() {
 
     //Counter plus one
     counter++;
+
+    timeOut();
 }
 
 var displayAnswer = function() {
@@ -165,6 +179,8 @@ var displayAnswer = function() {
 var displayFinal = function() {
     // Empty the displayed info
     $("#game").empty();
+
+    $("#gameTitle").text("Hope you had fun!")
 
     var newDiv = $("<div>");
     var correctDiv = $("<div>");
