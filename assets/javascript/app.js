@@ -13,6 +13,47 @@ var questions = {
     }
 }
 
+//For the stop watch functionality
+var intervalId;
+
+var clockRunning = false;
+
+var stopwatch = {
+    time: 0,
+    reset: function() {
+        stopwatch.time = 0;
+        $("#timer").text("00:00");
+    },
+    start: function() {
+        if (!clockRunning) {
+            intervalId = setInterval(stopwatch.count, 1000);
+            clockRunning = true;
+        }
+    },
+    count: function() {
+        stopwatch.time++;
+        var converted = stopwatch.timeConverter(stopwatch.time);
+        $("#timer").text(converted);
+    },
+    timeConverter: function(t) {
+        var minutes = Math.floor(t/60);
+        var seconds = t - (minutes/60);
+
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+
+        if (minutes == 0) {
+            minutes = "00";
+        }
+        else if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+
+        return minutes + ":" + seconds;
+    }
+}
+
 //Keys in questions
 var Keys = Object.keys(questions);
 
@@ -32,13 +73,19 @@ var displayQuestion = function() {
     //Empty the displayed info
     $("#game").empty();
 
+    //Show the stop watch
+    var timer = $("<div>");
+    timer.attr("id", "timer");
+    stopwatch.start();
+
     //Show the next question
     var newDiv = $("<div>");
     newDiv.attr("id", "willHide");
     var question = $("<div>");
     question.text(questions['Q' + counter].question);
     newDiv.append(question);
-    $("#game").append(newDiv);
+
+    $("#game").append(timer, newDiv);
     
     //Dynamically generate 4 input 
     for (let i = 0; i < questions['Q' + counter].choices.length; i++) {
@@ -130,7 +177,6 @@ var displayFinal = function() {
     newDiv.append(correctDiv, incorrectDiv, image);
     $("#game").append(newDiv);
 }
-
 
 $(document).on("click", ".generic", displayQuestion);
 $(document).on("click", ".submit", displayAnswer);
