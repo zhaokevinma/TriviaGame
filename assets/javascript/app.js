@@ -1,42 +1,3 @@
-var questions = {
-    Q0: {
-        question: "Which Hokage sealed the nine-tailed fox inside Naruto?",
-        choices: ["First Hokage", "Second Hokage", "Thrid Hokage", "Forth Hokage"],
-        correct: "Forth Hokage",
-        image: "assets/images/forthHokage.gif"
-    },
-    Q1: {
-        question: "Which character can only use taijutsu?",
-        choices: ["Iruka", "Zabuza", "Sasuke", "Rock Lee"],
-        correct: "Rock Lee",
-        image: "assets/images/rockLee.gif"
-    },
-    Q2: {
-        question: "Sasuke\'s goal is gain enough power to kill whom?",
-        choices: ["Naruto Uzumaki", "Itachi Uchiha", "Neji Hyuuga", "The Third Hokage"],
-        correct: "Itachi Uchiha",
-        image: "assets/images/itachiUchiha.gif"
-    },
-    Q3: {
-        question: "Every member of Akatsuki is a what?",
-        choices: ["kage", "swordsman", "kunoichi", "S-rank criminal"],
-        correct: "S-rank criminal",
-        image: "assets/images/akatsuki.gif",
-    },
-    Q4: {
-        question: "Who started the 4th Great Ninja War?",
-        choices: ["Kaguya", "Sasuke", "Orochimaru", "Obito"],
-        correct: "Obito",
-        image: "assets/images/obito.gif"
-    },
-    Q5: {
-        question: "Who manipulated Obito from the beginning?",
-        choices: ["Madara", "Sasuke", "Kakashi", "Rin"],
-        correct: "Madara",
-        image: "assets/images/madara.gif"
-    }
-}
-
 //For the stop watch functionality
 var intervalId;
 
@@ -85,15 +46,53 @@ var stopwatch = {
     }
 }
 
-//Keys in questions
+//Questions for game as an object
+var questions = {
+    Q0: {
+        question: "Which Hokage sealed the nine-tailed fox inside Naruto?",
+        choices: ["First Hokage", "Second Hokage", "Thrid Hokage", "Forth Hokage"],
+        correct: "Forth Hokage",
+        image: "assets/images/forthHokage.gif"
+    },
+    Q1: {
+        question: "Which character can only use taijutsu?",
+        choices: ["Iruka", "Zabuza", "Sasuke", "Rock Lee"],
+        correct: "Rock Lee",
+        image: "assets/images/rockLee.gif"
+    },
+    Q2: {
+        question: "Sasuke\'s goal is gain enough power to kill whom?",
+        choices: ["Naruto Uzumaki", "Itachi Uchiha", "Neji Hyuuga", "The Third Hokage"],
+        correct: "Itachi Uchiha",
+        image: "assets/images/itachiUchiha.gif"
+    },
+    Q3: {
+        question: "Every member of Akatsuki is a what?",
+        choices: ["kage", "swordsman", "kunoichi", "S-rank criminal"],
+        correct: "S-rank criminal",
+        image: "assets/images/akatsuki.gif",
+    },
+    Q4: {
+        question: "Who started the 4th Great Ninja War?",
+        choices: ["Kaguya", "Sasuke", "Orochimaru", "Obito"],
+        correct: "Obito",
+        image: "assets/images/obito.gif"
+    },
+    Q5: {
+        question: "Who manipulated Obito from the beginning?",
+        choices: ["Madara", "Sasuke", "Kakashi", "Rin"],
+        correct: "Madara",
+        image: "assets/images/madara.gif"
+    }
+}
+
+//Keys in questions, for later usegae of tracking whether to display final page
 var Keys = Object.keys(questions);
-console.log(Keys.length);
 
-//Counter
+//Counter for same purposes as above
 var counter = 0;
-console.log(counter);
 
-//For later comparison purposes
+//For later comparison (correct or incorrect choice) purposes
 var radiovalue = "";
 var correctchoice = "";
 
@@ -101,6 +100,7 @@ var correctchoice = "";
 var correct = 0;
 var incorrect = 0;
 
+//Dynamically generate displays for question
 var displayQuestion = function() {
 
     //Empty the displayed info
@@ -112,16 +112,17 @@ var displayQuestion = function() {
     stopwatch.reset();
     stopwatch.start();
 
-    //Show the next question
+    //Show the question
     var newDiv = $("<div>");
     newDiv.attr("id", "willHide");
     var question = $("<div>");
     question.text(questions['Q' + counter].question);
     newDiv.append(timer,question);
 
+    //Dsiplay dynamically generated items by appending
     $("#game").append(newDiv);
     
-    //Dynamically generate 4 input 
+    //Dynamically generate 4 input with radio check boxes for selection
     for (let i = 0; i < questions['Q' + counter].choices.length; i++) {
         var choiceDiv = $("<div>");
         var choiceInput = $('<input>');
@@ -142,6 +143,7 @@ var displayQuestion = function() {
         newDiv.append(choiceDiv);
     }
 
+    //Button for submit selected option
     var checkButton = $("<button>");
     checkButton.text("Submit");
     checkButton.attr("class", "submit");
@@ -149,23 +151,30 @@ var displayQuestion = function() {
 
     //Counter plus one
     counter++;
+
+    //Timeout
+    timeOut();
 }
 
+//Function for displaying answer page
 var displayAnswer = function() {
 
-    // Empty the displayed info
-    // $("#game").hide();
+    //Once on answer page, clear the timeout to avoid repetative appending
+    CLRTimeOut();
+    // Hide the displayed info
+    // Because .empty() will not allow tracking of selected option
     $("#willHide").hide();
 
+    //Information on the display for the answer page
     var newDiv = $("<div>");
     var result = $("<div>");
     var answer = $("<div>");
     var image = $("<img>");
     image.attr("src", questions['Q' + (counter -1)].image);
     var nextQuestion = $("<button>");
+    nextQuestion.text("Next question");
     
-    console.log(counter);
-    console.log(Keys.length);
+    //Conditional statement for checking whether current answer page is the last
     if (counter == Keys.length) {
         nextQuestion.attr("class", "final");
     }
@@ -173,12 +182,9 @@ var displayAnswer = function() {
         nextQuestion.attr("class", "generic");            
     }
 
-    nextQuestion.text("Next question");
-    
+    //Check answer selected and add 1 to correct/incorrect counter accordingly
     radiovalue = $("input[name='same']:checked").val();
     correctchoice = questions['Q' + (counter - 1)].correct;
-    console.log(radiovalue);
-    console.log(correctchoice);
 
     if (radiovalue == correctchoice) {
         result.text("That is correct!");
@@ -189,15 +195,16 @@ var displayAnswer = function() {
         incorrect++;
     }
 
+    //Displaying the dynamically generated items on page
     newDiv.append(result);
     answer.text("The correct answer is " + correctchoice);
     newDiv.append(answer);
     newDiv.append(image);
     newDiv.append(nextQuestion);
     $("#game").append(newDiv);
-
 }
 
+//Function for displaying the final page
 var displayFinal = function() {
     // Empty the displayed info
     $("#game").empty();
@@ -216,8 +223,24 @@ var displayFinal = function() {
     $("#game").append(newDiv);
 }
 
+//Timeout functionality
+var forTimeout;
+
+function timeOut () {
+    forTimeout = setTimeout(function() {
+        displayAnswer();
+    }, 31000);
+}
+
+function CLRTimeOut () {
+    clearTimeout(forTimeout); 
+}
+
+//Main 
 $(document).on("click", ".generic", displayQuestion);
 $(document).on("click", ".submit", displayAnswer);
 $(document).on('click', ".final", displayFinal);
+
+
 
 
