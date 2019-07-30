@@ -10,6 +10,30 @@ var questions = {
         choices: ["Iruka", "Zabuza", "Sasuke", "Rock Lee"],
         correct: "Rock Lee",
         image: "assets/images/rockLee.gif"
+    },
+    Q2: {
+        question: "Sasuke\'s goal is gain enough power to kill whom?",
+        choices: ["Naruto Uzumaki", "Itachi Uchiha", "Neji Hyuuga", "The Third Hokage"],
+        correct: "Itachi Uchiha",
+        image: "assets/images/itachiUchiha.gif"
+    },
+    Q3: {
+        question: "Every member of Akatsuki is a what?",
+        choices: ["kage", "swordsman", "kunoichi", "S-rank criminal"],
+        correct: "S-rank criminal",
+        image: "assets/images/akatsuki.gif",
+    },
+    Q4: {
+        question: "Who started the 4th Great Ninja War?",
+        choices: ["Kaguya", "Sasuke", "Orochimaru", "Obito"],
+        correct: "Obito",
+        image: "assets/images/obito.gif"
+    },
+    Q5: {
+        question: "Who manipulated Obito from the beginning?",
+        choices: ["Madara", "Sasuke", "Kakashi", "Rin"],
+        correct: "Madara",
+        image: "assets/images/madara.gif"
     }
 }
 
@@ -63,9 +87,11 @@ var stopwatch = {
 
 //Keys in questions
 var Keys = Object.keys(questions);
+console.log(Keys.length);
 
 //Counter
 var counter = 0;
+console.log(counter);
 
 //For later comparison purposes
 var radiovalue = "";
@@ -74,10 +100,6 @@ var correctchoice = "";
 //Correct and incorrect counter
 var correct = 0;
 var incorrect = 0;
-
-var timeOut = function() {
-    setTimeout(displayAnswer, 31000);
-}
 
 var displayQuestion = function() {
 
@@ -127,8 +149,6 @@ var displayQuestion = function() {
 
     //Counter plus one
     counter++;
-
-    timeOut();
 }
 
 var displayAnswer = function() {
@@ -144,6 +164,8 @@ var displayAnswer = function() {
     image.attr("src", questions['Q' + (counter -1)].image);
     var nextQuestion = $("<button>");
     
+    console.log(counter);
+    console.log(Keys.length);
     if (counter == Keys.length) {
         nextQuestion.attr("class", "final");
     }
@@ -164,7 +186,7 @@ var displayAnswer = function() {
     }
     else {
         result.text("Unfortunately that is not true.");
-        incorrect--;
+        incorrect++;
     }
 
     newDiv.append(result);
@@ -197,4 +219,5 @@ var displayFinal = function() {
 $(document).on("click", ".generic", displayQuestion);
 $(document).on("click", ".submit", displayAnswer);
 $(document).on('click', ".final", displayFinal);
+
 
